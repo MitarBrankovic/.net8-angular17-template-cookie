@@ -13,6 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { UserService } from 'src/app/services/user.service';
 import { CommonModule } from '@angular/common';
 import { ToastersService } from 'src/app/services/toasters.service';
+import { async } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -23,7 +24,8 @@ import { ToastersService } from 'src/app/services/toasters.service';
 })
 export class NavbarComponent {
   isLoggedIn$ = this.userService.isAuthenticated$;
-  username = signal<string>(localStorage.getItem('Template_email') || '');
+  username$ = this.userService.username$;
+  username: any;
 
   constructor(
     private router: Router,
@@ -31,10 +33,18 @@ export class NavbarComponent {
     private toastersService: ToastersService
   ) {}
 
-  ngOnChanges() {
+  ngOnInit() {
+    this.username$.subscribe((response) => {
+      this.username = signal<string>(response || '');
+    });
     this.username = signal<string>(
       localStorage.getItem('Template_email') || ''
     );
+    // if (!this.username) {
+    //   this.username = signal<string>(
+    //     localStorage.getItem('Template_email') || ''
+    //   );
+    // }
   }
 
   loginRedirect() {

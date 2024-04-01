@@ -57,6 +57,7 @@ export class LoginComponent {
       (response: any) => {
         console.log(response);
         this.userService.setIsAuthenticated(true, response.email);
+        this.userService.setUsername(response.email);
         this.toastersService.showSuccess('Login successful');
         this.router.navigate(['/']);
       },

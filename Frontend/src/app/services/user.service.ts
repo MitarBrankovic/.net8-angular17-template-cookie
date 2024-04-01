@@ -10,6 +10,9 @@ export class UserService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
+  private usernameSubject = new BehaviorSubject<string>('');
+  username$ = this.usernameSubject.asObservable();
+
   constructor(private http: HttpClient) {
     if (localStorage.getItem('Template_email')) {
       this.isAuthenticatedSubject.next(true);
@@ -23,6 +26,10 @@ export class UserService {
       localStorage.removeItem('Template_email');
     }
     this.isAuthenticatedSubject.next(isAuthenticated);
+  }
+
+  setUsername(username: string) {
+    this.usernameSubject.next(username);
   }
 
   login(dto: any): any {
